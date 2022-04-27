@@ -8,9 +8,32 @@ from django.http import HttpResponse
 from .forms import *
 from django.urls import reverse
 
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
+
 from .models import *
 import operator
 import json
+
+def loginPage(request):
+    return render(request, "app/login.html")
+
+def handLoginTeacher(request):
+    logout(request)
+
+    if request.method=="POST":
+        user=request.POST['TeacherName']
+        password=request.POST['teacherPass']
+        # print(user,password)
+        user=authenticate(username= user, password= password)
+        if user is not None:
+            login(request, user)
+            return HttpResponseRedirect(reverse("teacher"))
+        else:
+            messages.info(request, 'Invalid credentials. Please try again!')
+            return render(request,"app/login.html")
+    messages.info(request, 'Not POST request!')
+    return HttpResponseRedirect(reverse("loginPage"))
 
 def home(request):
     objekt = student.objects.order_by('rno')
@@ -26,12 +49,7 @@ def home(request):
         temp["sno"]=i
         temp["rno"]=x.rno
         temp["name"]=x.name
-
-        #remove
-        if(i%2==0):
-            temp["attendance"]="yes"
-        else:
-            temp["attendance"]="no"
+        temp["attendance"]="yes"
 
         temp["db"]=x.db
         if(not x.db):

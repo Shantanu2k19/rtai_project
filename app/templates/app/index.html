@@ -85,7 +85,7 @@
     width: 80%;
     color: black;
     border: 2px dashed rgb(95, 95, 95);
-    background-color: #BDBDBC;
+    background-color: #E5E4E2;
     border-radius: 10px;
   }
 
@@ -221,7 +221,7 @@
                   <div class="col-lg-6" data-aos="fade-up">
                     <div class="resume-item pb-0">
                       <h4>Roll Number</h4>
-                          <input class="form-control" list="browsers" name="browser" id="browser2"  onchange="changedSelect()" onkeypress='return event.keyCode!=13' autocomplete="off" onkeydown="changedSelect()">
+                          <input class="form-control" list="browsers" name="browser" id="browser2"  onchange="changedSelect()" onkeypress='event.keyCode!=13' autocomplete="off" onkeydown="changedSelect()">
                           <datalist id="browsers">
                           </datalist>   
                     </div>
@@ -235,7 +235,7 @@
                     </div>
                   </div>
                   
-                  <div id="addNew">
+                  <div id="addNew" >
                     {{form.as_p}}
                   </div>
                   <br>

@@ -13,6 +13,9 @@ class student(models.Model):
     db =  models.BooleanField(default=False)
     img = models.ForeignKey(Image, on_delete=models.DO_NOTHING, blank=True, null=True)
 
+    def __str__(self):
+        return f"{self.s_no} : {self.name}({self.rno})" 
+
 class klass(models.Model):
     s_no = models.AutoField(primary_key=True)
     subject = models.CharField(max_length=64)
