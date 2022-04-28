@@ -70,7 +70,15 @@
   #table1 tr:not(:first-child):hover, #table2 tr:not(:first-child):hover{
     background-color: #ddd;
   }
+
+  .absent{
+    color : red;
+  }
   
+  #notInDb{
+    background-color: #B6E2D3;
+  }
+
   .notInDb{
     background-color: #B6E2D3;
   }
@@ -103,22 +111,6 @@
     align-items: center;
     text-align: center;
   }
-
-  .alertMsg{
-  display: none;
-	color:white;
-	position: absolute;
-	border: 1 px solid;
-  padding: 10px;
-	text-align: center;
-	border-radius: 10px;
-	background: #2268CF;
-  font-weight: bold;
-	margin-left: 83px;
-  width: 200px;
-  z-index: 100;
-}
-
 </style>
 
 <body>
@@ -180,9 +172,7 @@
           <div class="section-title col-lg-4 col-sm-4 col-lg-4 col-4 ">
               <h2>Attendance</h2>
           </div>
-          
           <div class=" col-lg-6 col-sm-6 col-lg-6 col-6" style="text-align: center; margin: auto;">
-            <div class="alertMsg" id="alertMsg"></div>
             <div class="bootstrap-iso" style="background: none;">
               <div class="container-fluid">
                <div class="row">
@@ -195,7 +185,7 @@
                       <i class="fa fa-calendar">
                       </i>
                      </div>
-                     <input class="form-control" id="date" name="date" placeholder="MM/DD/YYYY" type="text" autocomplete="off" onchange="changeName()" style="height: 45px; color: #173b6c; font-size: medium;  font-weight: bold;"/>
+                     <input class="form-control" id="date" name="date" placeholder="MM/DD/YYYY" type="text" autocomplete="off"/>
                     </div>
                    </div>
                   </div>
@@ -207,16 +197,67 @@
 
 
           </div>
-          <div class="col-lg-2 col-sm-2 col-lg-2 col-2"><button class="btn btn-primary mt-3" style="padding:6px; font-size: small;" id="refreshButton" onclick="updateTable()"></button></div>
+          <div class="col-lg-2 col-sm-2 col-lg-2 col-2"><button class="btn btn-primary mt-3" style="padding:6px; font-size: small;" onclick="updateTable()">Update</button></div>
+        
+        <div >
+          hey
+        <table class="styled-table" id="table3"></table>
+
         </div>
 
+
         <div class="row skills-content">
+
           <div class="col-lg-6" data-aos="fade-up">
-            <table class="styled-table" id="table1"></table>
+
+            <table class="styled-table" id="table1">
+              <thead>
+                  <tr>
+                      <th>Sr. No.</th>
+                      <th>Roll No</th>
+                      <th>Name</th>
+                      <th>Attendance</th>
+                  </tr>
+              </thead>
+              <tbody>
+                {% for gg in stud1 %}
+                <tr>
+                    <td>{{ gg.sno }}</td>
+                    <td {% if not gg.db %} id='notInDb' {% endif %} >{{ gg.rno }}</td>
+                    <td>{{ gg.name }}</td>
+                    <td  {% if gg.attendance == 'Absent' %} class='absent' {% endif %} >{{ gg.attendance }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+          </table>
+
           </div>
+
           <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
-            <table class="styled-table" id="table2"></table>
+
+            <table class="styled-table" id="table2">
+              <thead>
+                  <tr>
+                    <th>Sr. No.</th>
+                    <th>Roll No</th>
+                    <th>Name</th>
+                    <th>Attendance</th>
+                  </tr>
+              </thead>
+              <tbody>
+                {% for gg in stud2 %}
+                <tr>
+                    <td>{{ gg.sno }}</td>
+                    <td {% if not gg.db %} id='notInDb' {% endif %} >{{ gg.rno }}</td>
+                    <td>{{ gg.name }}</td>
+                    <td  {% if gg.attendance == 'Absent' %} class='absent' {% endif %} >{{ gg.attendance }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+          </table>
+
           </div>
+
         </div>
 
       </div>
@@ -312,8 +353,6 @@
 	$(document).ready(function(){
 		var date_input=$('input[name="date"]');
 		var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
-
-    document.getElementById("refreshButton").innerHTML = "Refresh";
     
 		date_input.datepicker({
 			format: 'dd/mm/yyyy',
@@ -323,131 +362,80 @@
 		})
 	})
 
-  function changeName(){
-    var lol = document.getElementById("date").value;
-    console.log(lol);
-    if(lol == "") document.getElementById("refreshButton").innerHTML = "Refresh";
-    else document.getElementById("refreshButton").innerHTML = "Update";
-  }
-
-  function showMsg(){
-    console.log("message");
-    $("#alertMsg").fadeIn('slow', function () {
-      $(this).delay(1000).fadeOut('slow');
-    });
-	}
-
   function updateTable(){
     var date_selected = document.getElementById("date").value;
-    // console.log(date_selected);
-
-    if(date_selected == ""){
-      date_selected = date;
-    }
-
-    $.ajax({
-      url: "{% url 'attendance_for_date' %}",
-      data: {
-        'datee':date_selected,
-      },
-      type: 'get',
-      success: function (response) {
-        console.log(response.message);
-        createTable('table1',response.stud1,1);
-        createTable('table2',response.stud2,1);
-        console.log("tables update");
-        document.getElementById("alertMsg").innerHTML="Updated";
-        showMsg();
-      },
-      error: function (res) {
-        // console.log("error",res.status);
-        document.getElementById("alertMsg").innerHTML="No class found!";
-        showMsg();
-      }
-    });
+    console.log(date_selected);
   }
 </script>
 
+<!-- <td>{{ gg.sno }}</td>
+<td {% if not gg.db %} id='notInDb' {% endif %} >{{ gg.rno }}</td>
+<td>{{ gg.name }}</td>
+<td  {% if gg.attendance == 'Absent' %} class='absent' {% endif %} >{{ gg.attendance }}</td> -->
+
+
  <!-- creating table -->
-  <script>
-    var table1data = JSON.parse("{{stud1|escapejs}}");
-    var table2data = JSON.parse("{{stud2|escapejs}}");
+ <script>
+  var dataForJS = JSON.parse("{{stud11|escapejs}}");
+  function tabulate3(data, columns) {
+			clearcontent('table3');
+			//var table = d3.select('#table_3').append('table');
+			var table = d3.select('#table3');
+			var thead = table.append('thead');
+			var tbody = table.append('tbody');
 
-    function createTable(tableName,Tabledata,flag){
+			// append the header row
+			thead.append('tr')
+				.selectAll('th')
+				.data(columns).enter()
+				.append('th')
+				.text(function(column) {
+					return column;
+				});
 
-      if(flag==1){
-        //delete row from table
-        $("#"+tableName+" tr").remove();
-      }
+			// create a row for each object in the data
+			var rows = tbody.selectAll('tr')
+				.data(data)
+				.enter()
+				.append('tr');
 
-      var dataForJS = Tabledata;
-      let table = document.createElement('table');
-      let thead = document.createElement('thead');
-      let tbody = document.createElement('tbody');
+			// create a cell in each row for each column
+			var cells = rows.selectAll('td')
+				.data(function(row) {
+					return columns.map(function(column) {
+						return {
+							column: column,
+							value: row[column]
+						};
+					});
+				})
+				.enter()
+				.append('td')
+				.text(function(d) {
+					return d.value;
+				});
 
+			//addRowCount('#table_3');
+		}
 
-      table.appendChild(thead);
-      table.appendChild(tbody);
+		function clearcontent(elementID) {
+			document.getElementById(elementID).innerHTML = "";
+		}
+    // temp["sno"]=i
+    //     temp["rno"]=x.rno
+    //     temp["name"]=x.name
+    //     if x.attendance:
+    //         temp["attendance"] = "Present"
+    //     else:
+    //         temp["attendance"] = "Absent"
 
-      table.style.minWidth="100%";
-
-      // Adding the entire table to the body tag
-      document.getElementById(tableName).appendChild(table);
-
-      let row_1 = document.createElement('tr');
-      let heading_1 = document.createElement('th');
-      heading_1.innerHTML = "Sr. No.";
-      heading_1.style.minWidth="10%";
-
-      let heading_2 = document.createElement('th');
-      heading_2.innerHTML = "Roll No";
-      heading_2.style.minWidth="20%";
-
-      let heading_3 = document.createElement('th');
-      heading_3.innerHTML = "Name";
-      heading_3.style.minWidth="40%";
-
-      let heading_4 = document.createElement('th');
-      heading_4.innerHTML = "Attendance";
-      heading_4.style.minWidth="30%";
-
-      row_1.appendChild(heading_1);
-      row_1.appendChild(heading_2);
-      row_1.appendChild(heading_3);
-      row_1.appendChild(heading_4);
-      thead.appendChild(row_1);
-
-      for(var i=0;i<dataForJS.length;i++){
-        let row_2 = document.createElement('tr');
-
-        let row_2_data_1 = document.createElement('td');
-        row_2_data_1.innerHTML = dataForJS[i]["sno"];
-
-        let row_2_data_2 = document.createElement('td');
-        row_2_data_2.innerHTML = dataForJS[i]["rno"];
-        if(dataForJS[i]["db"]==false) row_2_data_2.className = "notInDb";
-
-        let row_2_data_3 = document.createElement('td');
-        row_2_data_3.innerHTML = dataForJS[i]["name"];
-
-        let row_2_data_4 = document.createElement('td');
-        row_2_data_4.innerHTML = dataForJS[i]["attendance"];
-        if(dataForJS[i]["attendance"]=="Absent") row_2_data_4.style.color ="red";
-        else row_2_data_4.style.color ="green";
-
-        row_2.appendChild(row_2_data_1);
-        row_2.appendChild(row_2_data_2);
-        row_2.appendChild(row_2_data_3);
-        row_2.appendChild(row_2_data_4);
-        tbody.appendChild(row_2);
-      }
-    }
-
-    createTable('table1',table1data, 0);
-    createTable('table2',table2data, 0);
-  </script>
-
+    //     temp["db"]=x.db
+    //     if(not x.db):
+    //         nonDBrNos[x.rno] = x.name
+    columns = ['sno','rno','name','attendance']
+    tabulate3(dataForJS, columns)
   
+  </script>
 
   <script>
     function ajax_call(){
@@ -513,3 +501,55 @@
 </body>
 
 </html>
+
+<!-- create table using d3  -->
+<script>
+    // var dataForJS = JSON.parse("{{stud11|escapejs}}");
+    function tabulate3(data, columns) {
+              clearcontent('table1');
+              //var table = d3.select('#table_3').append('table');
+              var table = d3.select('#table1');
+              var thead = table.append('thead');
+              var tbody = table.append('tbody');
+  
+              // append the header row
+              thead.append('tr')
+                  .selectAll('th')
+                  .data(columns).enter()
+                  .append('th')
+                  .text(function(column) {
+                      return column;
+                  });
+  
+              // create a row for each object in the data
+              var rows = tbody.selectAll('tr')
+                  .data(data)
+                  .enter()
+                  .append('tr');
+  
+              // create a cell in each row for each column
+              var cells = rows.selectAll('td')
+                  .data(function(row) {
+                      return columns.map(function(column) {
+                          return {
+                              column: column,
+                              value: row[column]
+                          };
+                      });
+                  })
+                  .enter()
+                  .append('td')
+                  .text(function(d) {
+                      return d.value;
+                  });
+  
+              //addRowCount('#table_3');
+          }
+  
+          function clearcontent(elementID) {
+              document.getElementById(elementID).innerHTML = "";
+          }
+      columns = ['sno','rno','name','attendance']
+      // tabulate3(dataForJS, columns)
+    
+    </script>

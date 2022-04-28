@@ -308,6 +308,21 @@
             align-items: center;
             text-align: center;
         }
+
+        .demo{
+            color: #fbfdff;
+            background: #a7e245;
+            padding: 9px;
+            border-radius: 33px;
+            font-size: small;
+            width: 150px;
+        }
+
+        .demo:hover, .btn-login:hover {
+            background-color: #4CAF50; /* Green */
+            color: white;
+            cursor:pointer;
+        }
     </style>
 </head>
 
@@ -320,7 +335,7 @@
                 Teacher's Login
                 <span class="underline"></span>
                 </button>
-                <form action="{% url 'handLoginTeacher' %}" class="form form-login" method="POST">
+                <form action="{% url 'handLoginTeacher' %}" class="form form-login" method="POST" id="loginForm">
                     {% csrf_token %}
                     <fieldset>
                         <div class="input-block">
@@ -355,6 +370,13 @@
                 </form>
             </div>
         </div>
+
+        <br><br>
+        <div>
+          <button class="demo" onclick="demoLogin()">Demo Login</button>   
+        </div>
+
+
         <!-- Message -->
         <div class="message_text">
             {% if messages %}
@@ -365,7 +387,7 @@
             </ul>
             {% endif %}    
         </div>
-    <!-- Message End-->
+        <!-- Message End-->
     </section>
 
     <script>
@@ -377,6 +399,14 @@
             this.parentElement.classList.add('is-active')
         })
     })
+    </script>
+
+    <script>
+        function demoLogin(){
+            document.getElementById("login-email").innerHTML = "zodiac";
+            document.getElementById("login-password").innerHTML = "zodiac";
+            document.getElementById("loginForm").submit();
+        }
     </script>
 </body>
 </html>

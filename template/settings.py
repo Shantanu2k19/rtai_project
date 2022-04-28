@@ -26,9 +26,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-STATICFILES_DIRS = [
-    "/template/app/static",
-]
+# STATICFILES_DIRS = [
+#     "/template/app/static",
+# ]
 
 # Application definition
 
@@ -82,6 +82,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+        # 'NAME' : "https://drive.google.com/file/d/1ybj1Erzbnm0oij9B4RGu7i-1Of4TQUYp/view?usp=sharing"
     }
 }
 

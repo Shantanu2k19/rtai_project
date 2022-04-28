@@ -4,12 +4,19 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('teacher', views.home, name="teacher"),
-
     #for login
     path('', views.loginPage, name="loginPage"),
     path('handLoginTeacher', views.handLoginTeacher, name="handLoginTeacher"),
 
+    #teacher loggedIn
+    path('teacher', views.home, name="teacher"),
+
+    #testing
     path('test',views.test, name="test"),
+
+    #ajax
+    path('ajax_test', views.ajax_test, name="ajax_test"),
+    path('mark_present', views.mark_present, name="mark_present"),
+    path('attendance_for_date', views.attendance_for_date, name="attendance_for_date"),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
