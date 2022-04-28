@@ -2,9 +2,11 @@ from datetime import datetime
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.http import HttpResponseRedirect,HttpResponse
-from sqlalchemy import all_
+from sqlalchemy import all_, null
 
 from django.http import HttpResponse
+
+from template.settings import BASE_DIR
 from .forms import *
 from django.urls import reverse
 
@@ -19,6 +21,11 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.response import Response
 
+import base64
+import os
+import requests
+
+piServerURL = "http://127.0.0.1:5000/test"
 
 ##########################################################
 
@@ -110,6 +117,30 @@ def attendance_for_date(request):
     return Response(context, status=status.HTTP_200_OK)
 
 
+@api_view(('GET',))
+def updateDB(request):
+    f = student.objects.all()
+    studs = []
+    for x in f:
+        if(x.db==False and x.img!=None):  #not in db
+            studs.append(x.name)
+            stud = student.objects.get(rno = x.rno)
+            stud.db=True
+            stud.save()
+    print(studs)
+    if(len(studs)>0):
+        #call api to raspberry pi
+        context = {
+            "message":1,
+            "names":studs,
+        }
+        return Response(context, status=status.HTTP_200_OK)
+
+    context = {
+        "message":0,
+    }
+    return Response(context, status=status.HTTP_200_OK)
+
 
 ##########################################################
 
@@ -191,7 +222,7 @@ def home(request):
         form = ImageForm(request.POST, request.FILES)
         if form.is_valid():
             img = form.cleaned_data.get("photo")
-            obj = Image.objects.create(photo = img)
+            obj = images.objects.create(photo = img)
             obj.save()
 
             person = student.objects.get(rno=rno)
@@ -201,10 +232,34 @@ def home(request):
 
             form = ImageForm()
             context["form"] = form
-            messages.info(request, person.name+"'s Photo Received! Database will be updated.")
-            return HttpResponseRedirect(reverse("teacher"))
+            responseFromPI = sendImageToRpi(rno)
+            if responseFromPI=="ok":
+                messages.info(request, person.name+"'s Photo Received! Database will be updated.")
+                return HttpResponseRedirect(reverse("teacher"))
+            else:
+                messages.info(request, "Some error occured!")
+                return HttpResponseRedirect(reverse("teacher"))
     
     return render(request, "app/index.html", context)
+
+def sendImageToRpi(rollNo):
+    x = student.objects.get(rno=rollNo)
+    url = piServerURL
+    path = os.path.join(BASE_DIR,'media',str(x.img.photo))
+    imgName = rollNo+".png"
+
+    payload={}
+    files=[
+        ('img',(imgName,open(path,'rb'),'image/png'))
+    ]
+    headers = {
+    'rno': rollNo
+    }
+    response = requests.request("POST", url, headers=headers, data=payload, files=files)
+    print(response.text)
+    return response.text
+
+
 
 
 def test(request):

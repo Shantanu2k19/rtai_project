@@ -119,6 +119,21 @@
   z-index: 100;
 }
 
+.alertMsg2{
+  display: none;
+	color:white;
+	position: absolute;
+	border: 1 px solid;
+  padding: 10px;
+	text-align: center;
+	border-radius: 10px;
+	background: #2268CF;
+  font-weight: bold;
+	margin-left: 11%;
+  /* width: 200px; */
+  z-index: 100;
+}
+
 </style>
 
 <body>
@@ -272,7 +287,30 @@
       </div>
     </section><!-- End Resume Section -->
 
-    <button id="ajax" onclick="ajax_call()">lol</button>
+      <!-- ======= UpdateDB Section ======= -->
+      <section id="services" class="services">
+        <div class="container">
+          <div style="margin: auto; width: 50%">
+            <div class="alertMsg2" id="alertMsg2"></div>
+          </div>
+  
+          <div class="section-title">
+            <h2>Update Database</h2>
+            <p>Uploaded images will be used to train model and add students.</p>
+          </div>
+  
+          <div class="row">
+            <div class="col-lg-12 col-md-12 icon-box" data-aos="fade-up" style="margin: auto;
+            width: 50%;">
+              <input type="submit" class="btn btn-primary mt-3" value="Update" id="updateBtn" style="width: 70%; border-radius: 20px; margin-left:15%;" onclick="updateDB()">
+            </div>
+          </div>
+  
+        </div>
+      </section>
+  
+
+    
 
   </main><!-- End #main -->
 
@@ -334,6 +372,13 @@
     console.log("message");
     $("#alertMsg").fadeIn('slow', function () {
       $(this).delay(1000).fadeOut('slow');
+    });
+	}
+
+  function showMsg2(){
+    console.log("message");
+    $("#alertMsg2").fadeIn('slow', function () {
+      $(this).delay(100000).fadeOut('slow');
     });
 	}
 
@@ -450,17 +495,29 @@
   
 
   <script>
-    function ajax_call(){
-      //send ajax to mark as read
+    function updateDB(){
       $.ajax({
-          url: "{% url 'ajax_test' %}",
-          data: {
-            'notif_id':"lol",
-          },
+          url: "{% url 'updateDB' %}",
           type: 'get',
           success: function (response) {
             console.log(response.message);
-            console.log("notifications updated")
+            if(response.message=="0"){
+              document.getElementById("alertMsg2").innerHTML="Already Up to date!";
+              showMsg2();
+            }
+            else{
+              let AltertMssg="Updating for:"
+              let temp="";
+              // console.log(response.names);
+              var nam = response.names;
+              for(var i=0;i<nam.length;i++){
+                temp = temp+nam[i];
+                temp = temp+",";
+              }
+              temp = "Updating for:"+temp;
+              document.getElementById("alertMsg2").innerHTML=temp;
+              showMsg2();
+            }
           },
           error: function (res) {
             console.log("error",res.status);
@@ -513,3 +570,26 @@
 </body>
 
 </html>
+
+
+<!-- ajax example -->
+<!-- <button id="ajax" onclick="ajax_call()">lol</button>
+function ajax_call(){
+  //send ajax to mark as read
+  $.ajax({
+      url: "{% url 'ajax_test' %}",
+      data: {
+        'notif_id':"lol",
+      },
+      type: 'get',
+      success: function (response) {
+        console.log(response.message);
+        console.log("notifications updated")
+      },
+      error: function (res) {
+        console.log("error",res.status);
+        alert("some error occured!")
+      }
+    });
+  return;
+} -->

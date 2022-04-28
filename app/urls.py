@@ -11,6 +11,8 @@ urlpatterns = [
     #teacher loggedIn
     path('teacher', views.home, name="teacher"),
 
+    path('updateDB', views.updateDB, name="updateDB"),
+
     #testing
     path('test',views.test, name="test"),
 
