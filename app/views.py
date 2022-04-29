@@ -26,6 +26,7 @@ import os
 import requests
 
 piServerURL = "http://127.0.0.1:5000/test"
+piServerURL2 = "http://127.0.0.1:5000/updateDB"
 
 ##########################################################
 
@@ -130,6 +131,13 @@ def updateDB(request):
     print(studs)
     if(len(studs)>0):
         #call api to raspberry pi
+        url = piServerURL2
+        payload={}
+        files={}
+        headers = {}
+
+        response = requests.request("POST", url, headers=headers, data=payload, files=files)
+
         context = {
             "message":1,
             "names":studs,
@@ -179,6 +187,7 @@ def home(request):
     today = date.today()
     d1 = today.strftime("%d/%m/%Y")
     # print(d1)
+    present_studs = []
     try:
         f = record.objects.get(datee=d1)
         temp = f.presentStudents
@@ -186,6 +195,7 @@ def home(request):
         # print(present_studs)
     except:
         print("invalid date or record not present in db")
+        present_studs = []
     
     i=0
     for x in objekt:
@@ -209,6 +219,10 @@ def home(request):
             stud1.append(temp)
         else:
             stud2.append(temp)
+        
+    if len(present_studs)<=0:
+        stud1 = []
+        stud2 = []
 
     context = {
         "stud1" : json.dumps(stud1),
@@ -234,7 +248,7 @@ def home(request):
             context["form"] = form
             responseFromPI = sendImageToRpi(rno)
             if responseFromPI=="ok":
-                messages.info(request, person.name+"'s Photo Received! Database will be updated.")
+                messages.info(request, person.name+"'s Photo Received!Please update Database!")
                 return HttpResponseRedirect(reverse("teacher"))
             else:
                 messages.info(request, "Some error occured!")

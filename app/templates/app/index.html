@@ -178,10 +178,15 @@
 
       <h1>Hola</h1>
       <p> <span class="typed" data-typed-items="Take, Automate, Simplify"></span>  Attendance</p>
-      <p>Class - <a href="#" style="color:white;"><strong><u>Recent Trends in AI</strong></u></a><br>
+      <p>
+      Class - <a href="#" style="color:white;"><strong><u>Recent Trends in AI</strong></u></a><br>
       Code - <strong>EC462</strong><br>
-      <p style="font-size: medium;">Time - 08:00 : 10:00<br>
-      <span id="todays_date"></span></p></p>
+        <p style="font-size: medium;">
+          <span id="class_time">Time - 08:00 : 10:00</span>
+          <br>
+          <span id="todays_date"></span>
+        </p>
+      </p>
     </div>
   </section><!-- End Hero -->
 
@@ -378,7 +383,7 @@
   function showMsg2(){
     console.log("message");
     $("#alertMsg2").fadeIn('slow', function () {
-      $(this).delay(100000).fadeOut('slow');
+      $(this).delay(1000).fadeOut('slow');
     });
 	}
 
@@ -494,6 +499,7 @@
 
   
 
+<!-- ajax updateDB  -->
   <script>
     function updateDB(){
       $.ajax({
@@ -529,9 +535,18 @@
   </script>
 
   <script>
-    var date =  new Date().toLocaleDateString();
-    var time =  new Date().toLocaleTimeString('en-US', { hour12: false,hour: "numeric", minute: "numeric"});
-    document.getElementById("todays_date").innerHTML = date;
+    var kk= JSON.parse("{{stud1|escapejs}}");
+    console.log(kk.length);
+    if(kk.length==0){
+      document.getElementById("todays_date").innerHTML = "No class found";
+      document.getElementById("class_time").style.display="none";
+    }
+    else{
+      var date =  new Date().toLocaleDateString();
+      var time =  new Date().toLocaleTimeString('en-US', { hour12: false,hour: "numeric", minute: "numeric"});
+
+      document.getElementById("todays_date").innerHTML = date;
+    }
 
     // if(document.getElementById("attend").innerHTML=="yes"){}
   </script>
