@@ -13,6 +13,8 @@ urlpatterns = [
 
     path('updateDB', views.updateDB, name="updateDB"),
 
+    path('dataBase', views.dataBase, name="dataBase"),
+
     #testing
     path('test',views.test, name="test"),
 

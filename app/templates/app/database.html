@@ -1,0 +1,196 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>attendance portal</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="static/assets/img/favicon.png" rel="icon">
+  <link href="static/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="static/assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="static/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="static/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="static/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="static/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="static/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="static/assets/css/style.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" />
+  <link rel="stylesheet" href="https://formden.com/static/cdn/font-awesome/4.4.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+
+</head>
+
+<style>
+  .styled-table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: x-small;
+    font-family: sans-serif;
+    /* min-width: 400px; */
+    width: 100%;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .styled-table thead tr {
+    background-color: #009879;
+    color: #ffffff;
+    text-align: left;
+  }
+
+  .styled-table th, .styled-table td {
+    padding: 6px 9px;
+  }
+
+  .styled-table tbody tr {
+      border-bottom: 1px solid #dddddd;
+  }
+
+  .styled-table tbody tr:nth-of-type(even) {
+      background-color: #f3f3f3;
+  }
+
+  .styled-table tbody tr:last-of-type {
+      border-bottom: 2px solid #009879;
+  }
+
+  #table1 tr:not(:first-child):hover, #table2 tr:not(:first-child):hover{
+    background-color: #ddd;
+  }
+  
+  .studImage{
+    width: 120px;
+    border: 2px solid green;
+    border-radius: 10px;
+  }
+</style>
+
+<body>
+
+  <!-- ======= Mobile nav toggle button ======= -->
+  <i class="bi bi-list mobile-nav-toggle d-xl-none"></i>
+
+  <!-- ======= LEFT PANEL ======= -->
+  <header id="header">
+    <div class="d-flex flex-column">
+
+      <div class="profile">
+        <img src="static/assets/img/women.png" alt="" class="img-fluid rounded-circle">
+        <h1 class="text-light"><a href="index.html"> {{ user.get_username }}</a></h1>
+      </div>
+
+      <nav id="navbar" class="nav-menu navbar">
+        <ul>
+          <li><a href="{% url 'teacher' %}" class="nav-link scrollto active"><i class="bx bx-home"></i> <span>Home</span></a></li>
+          <li><a href="{% url 'teacher' %}" class="nav-link scrollto"><i class="bx bx-user"></i> <span>Attendance</span></a></li>
+          <li><a href="{% url 'teacher' %}" class="nav-link scrollto"><i class="bx bx-file-blank"></i> <span>Add student</span></a></li>
+          <hr style="color:white; width:100%;">
+          <li><a href="" class="nav-link scrollto"><i class="bx bx-book-content"></i> <span>Database</span></a></li>
+          <li><a href="{% url 'logout' %}" class="nav-link scrollto"><i class="bx bx-server"></i> <span>Log-Out</span></a></li>
+        </ul>
+      </nav><!-- .nav-menu -->
+    </div>
+  </header><!-- End Header -->
+
+
+  <main id="main"> 
+    <!-- ======= ATTENDANCE table Section ======= -->
+    <section id="skills" class="skills section-bg" >
+      <div class="container" style="min-height: 800px;">
+
+        <div class="row" >
+
+          <div class="section-title col-lg-4 col-sm-4 col-lg-4 col-4 ">
+              <h2>DataBase</h2>
+          </div>
+          
+          <div class=" col-lg-6 col-sm-6 col-lg-6 col-6" style="text-align: center; margin: auto;">
+          </div>
+        </div>
+
+        <div class="row skills-content" data-aos="fade-up">
+            <table class="styled-table" style="margin-left: 35px; margin-right: 35px; width: 95%;">
+                <tr id="table_first">
+                    <th>S. No</th>
+                    <th>Name</th>
+                    <th>Date Modified</th>
+                    <th>Image</th>
+                </tr>
+
+                {% for gg in data %}
+                <tr>
+                    <td>{{ gg.sno }}</td>
+                    <td>{{ gg.name }}</td>
+                    <td>{{ gg.date }}</td>
+                    <td><img class="studImage" src="{{ gg.img }}"></td>
+                </tr>
+                {% endfor %}
+
+            </table>
+        </div>
+
+      </div>
+    </section><!-- End Skills Section -->
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+    <div class="container">
+      <div class="credits">
+        Delhi Technological University</a>
+      </div>
+    </div>
+  </footer><!-- End  Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="static/assets/vendor/purecounter/purecounter.js"></script>
+  <script src="static/assets/vendor/aos/aos.js"></script>
+  <script src="static/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="static/assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="static/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="static/assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="static/assets/vendor/typed.js/typed.min.js"></script>
+  <script src="static/assets/vendor/waypoints/noframework.waypoints.js"></script>
+  <script src="static/assets/vendor/php-email-form/validate.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="static/assets/js/main.js"></script>
+  <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
+
+  <!-- jquery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+
+
+<script>
+  function showMsg(){
+    console.log("message");
+    $("#alertMsg").fadeIn('slow', function () {
+      $(this).delay(1000).fadeOut('slow');
+    });
+	}
+</script>
+
+ 
+
+</body>
+
+</html>

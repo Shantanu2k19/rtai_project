@@ -309,6 +309,30 @@ def sendImageToRpi(rollNo):
     return response.text
 
 
+def dataBase(request):
+    print("db")
+    f = student.objects.all()
+    data = []
+    i=0
+    for x in f:
+        if(x.db):
+            # print(x.name)
+            i+=1
+            temp = {}
+            temp["sno"]=i
+            temp["name"]=x.name
+            obj = images.objects.get(pk=x.img.im_no)
+            temp["date"]=datetime.strftime(obj.date,"%d/%m/%y,%H:%M:%S")
+            temp["img"]=obj.photo.url
+            # print(obj.photo.url)
+
+            data.append(temp)
+            
+    context = {
+        "data":data,
+    }
+    return render(request, "app/database.html",context)
+
 
 
 def test(request):
