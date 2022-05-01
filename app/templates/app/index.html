@@ -202,6 +202,7 @@
 
           <div class="section-title col-lg-4 col-sm-4 col-lg-4 col-4 ">
               <h2>Attendance</h2>
+              <span id="attendanceDate"></span>
           </div>
           
           <div class=" col-lg-6 col-sm-6 col-lg-6 col-6" style="text-align: center; margin: auto;">
@@ -230,7 +231,7 @@
 
 
           </div>
-          <div class="col-lg-2 col-sm-2 col-lg-2 col-2"><button class="btn btn-primary mt-3" style="padding:6px; font-size: small;" id="refreshButton" onclick="updateTable()"></button></div>
+          <div class="col-lg-2 col-sm-2 col-lg-2 col-2" style="padding:19px;"><button class="btn btn-primary mt-3" style="padding:6px; font-size: small;" id="refreshButton" onclick="updateTable()"></button></div>
         </div>
 
         <div class="row skills-content">
@@ -410,6 +411,7 @@
         createTable('table1',response.stud1,1);
         createTable('table2',response.stud2,1);
         console.log("tables update");
+        document.getElementById("attendanceDate").innerHTML = date_selected;
         document.getElementById("alertMsg").innerHTML="Updated";
         showMsg();
       },
@@ -426,6 +428,8 @@
   <script>
     var table1data = JSON.parse("{{stud1|escapejs}}");
     var table2data = JSON.parse("{{stud2|escapejs}}");
+    var datee = JSON.parse("{{datee|escapejs}}");
+    document.getElementById("attendanceDate").innerHTML = datee;
 
     function createTable(tableName,Tabledata,flag){
 

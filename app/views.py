@@ -259,7 +259,8 @@ def home(request):
         "stud1" : json.dumps(stud1),
         "stud2" : json.dumps(stud2),
         "nonDBrNos" : json.dumps(nonDBrNos),
-        "form" : ImageForm()
+        "form" : ImageForm(),
+        "datee" :json.dumps(d1),
     }
 
     if request.method == "POST":
