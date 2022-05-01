@@ -68,9 +68,6 @@ def mark_present(request):
 
     try:
         f = record.objects.get(datee=d1)
-        temp = f.presentStudents
-        present_studs=temp.split('.')
-        print(present_studs)
         mssg = "class found, appending"
 
         f.presentStudents = f.presentStudents+'.'+str(stud_id)
