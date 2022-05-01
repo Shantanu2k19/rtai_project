@@ -316,7 +316,6 @@
   
         </div>
       </section>
-      <button id="ajax" onclick="ajax_call()">lol</button>
   
 
     
@@ -356,26 +355,6 @@
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
 
 
-<script>
-function ajax_call(){
-  //send ajax to mark as read
-  $.ajax({
-      url: "{% url 'ajax_test' %}",
-      data: {
-        'notif_id':"lol",
-      },
-      type: 'get',
-      success: function (response) {
-        console.log(response.message);
-      },
-      error: function (res) {
-        console.log("error",res.status);
-        alert("some error occured!")
-      }
-    });
-  return;
-} 
-</script>
 <script>
 	$(document).ready(function(){
 		var date_input=$('input[name="date"]');
