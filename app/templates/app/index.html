@@ -147,7 +147,7 @@
 
       <div class="profile">
         <img src="static/assets/img/women.png" alt="" class="img-fluid rounded-circle">
-        <h1 class="text-light"><a href="index.html">Name</a></h1>
+        <h1 class="text-light"><a href="index.html"> {{ user.get_username }}</a></h1>
       </div>
 
       <nav id="navbar" class="nav-menu navbar">
@@ -155,6 +155,9 @@
           <li><a href="#hero" class="nav-link scrollto active"><i class="bx bx-home"></i> <span>Home</span></a></li>
           <li><a href="#skills" class="nav-link scrollto"><i class="bx bx-user"></i> <span>Attendance</span></a></li>
           <li><a href="#resume" class="nav-link scrollto"><i class="bx bx-file-blank"></i> <span>Add student</span></a></li>
+          <hr style="color:white; width:100%;">
+          <li><a href="" class="nav-link scrollto"><i class="bx bx-book-content"></i> <span>Database</span></a></li>
+          <li><a href="{% url 'logout' %}" class="nav-link scrollto"><i class="bx bx-server"></i> <span>Log-Out</span></a></li>
         </ul>
       </nav><!-- .nav-menu -->
     </div>
@@ -313,6 +316,7 @@
   
         </div>
       </section>
+      <button id="ajax" onclick="ajax_call()">lol</button>
   
 
     
@@ -351,6 +355,27 @@
 
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
 
+
+<script>
+function ajax_call(){
+  //send ajax to mark as read
+  $.ajax({
+      url: "{% url 'ajax_test' %}",
+      data: {
+        'notif_id':"lol",
+      },
+      type: 'get',
+      success: function (response) {
+        console.log(response.message);
+      },
+      error: function (res) {
+        console.log("error",res.status);
+        alert("some error occured!")
+      }
+    });
+  return;
+} 
+</script>
 <script>
 	$(document).ready(function(){
 		var date_input=$('input[name="date"]');
@@ -509,6 +534,10 @@
             console.log(response.message);
             if(response.message=="0"){
               document.getElementById("alertMsg2").innerHTML="Already Up to date!";
+              showMsg2();
+            }
+            else if(response.message=="lol"){
+              document.getElementById("alertMsg2").innerHTML="Not available for demo user!";
               showMsg2();
             }
             else{

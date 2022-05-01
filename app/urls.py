@@ -6,7 +6,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     #for login
     path('', views.loginPage, name="loginPage"),
-    path('handLoginTeacher', views.handLoginTeacher, name="handLoginTeacher"),
+    path('handLoginTeacher', views.handLoginTeacher, name="handLoginTeacher"),path('logout',views.handlogout,name="logout"),
 
     #teacher loggedIn
     path('teacher', views.home, name="teacher"),

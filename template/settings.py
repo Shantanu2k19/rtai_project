@@ -24,7 +24,11 @@ SECRET_KEY = 'ygq!uhn2@)if(oizzy8wod9m*=*s8=bm0830+&iebiual!+pgo'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '127.0.0.1', 
+    'localhost',
+    'shantanu2k17.pythonanywhere.com',
+]
 
 # STATICFILES_DIRS = [
 #     "/template/app/static",

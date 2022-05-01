@@ -36,33 +36,54 @@ piServerURL2 = "http://127.0.0.1:5000/updateDB"
 
 @api_view(('GET',))
 def ajax_test(request):
+    if(not request.user.is_authenticated or request.user.username=="demo_user"):
+        context = {
+            "message":"lol",
+        }
+        return Response(context, status=status.HTTP_200_OK)
     request_data = request.GET.get('notif_id')
     print("got notif_id : ",request_data)
+
+    print(request.user.is_authenticated)
+    print(request.user.username)
   
-    # return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     context = {
-        "message":"success, notification marked as read",
+        "message":"AJAX success",
     }
-    return Response(context, status=status.HTTP_400_BAD_REQUEST)
+    return Response(context, status=status.HTTP_200_OK)
 
 @api_view(('GET',))
 def mark_present(request):
     stud_rno = request.GET.get('rno')
     print(stud_rno," -> marking present")
+    return Response(status=status.HTTP_200_OK)
+
+    from datetime import date
+    today = date.today()
+    d1 = today.strftime("%d/%m/%Y")
+
+    stud = student.objects.get(rno=stud_rno)
+    stud_id = stud.s_no
+    print(stud.name)
 
     try:
-        f = student.objects.get(rno=stud_rno)
-    except:
-        context = {
-            "message":"Roll no not found",
-        }
-        return Response(context, status=status.HTTP_400_BAD_REQUEST)
+        f = record.objects.get(datee=d1)
+        temp = f.presentStudents
+        present_studs=temp.split('.')
+        print(present_studs)
+        print("class found, appending")
 
-    f.attendance=True
-    f.save()
+        f.presentStudents = f.presentStudents+'.'+str(stud_id)
+        f.save()
+
+    except:
+        print("no class found, creating one")
+        studentss = str(stud_id)
+        f = record.objects.create(datee=d1, presentStudents=studentss)
+        f.save()
   
     context = {
-        "message":"success, marked as present",
+        "message":"success",
     }
     return Response(context, status=status.HTTP_200_OK)
 
@@ -120,6 +141,12 @@ def attendance_for_date(request):
 
 @api_view(('GET',))
 def updateDB(request):
+    if(not request.user.is_authenticated or request.user.username=="demo_user"):
+        context = {
+            "message":"lol",
+        }
+        return Response(context, status=status.HTTP_200_OK)
+        
     f = student.objects.all()
     studs = []
     for x in f:
@@ -165,7 +192,7 @@ def handLoginTeacher(request):
     if request.method=="POST":
         user=request.POST['TeacherName']
         password=request.POST['teacherPass']
-        # print(user,password)
+        print(user,password)
         user=authenticate(username= user, password= password)
         if user is not None:
             login(request, user)
@@ -175,6 +202,12 @@ def handLoginTeacher(request):
             return render(request,"app/login.html")
     messages.info(request, 'Not POST request!')
     return HttpResponseRedirect(reverse("loginPage"))
+
+def handlogout(request):
+    logout(request)
+    messages.info(request, 'Logged out!')
+    return HttpResponseRedirect(reverse("loginPage"))
+
 
 def home(request):
     objekt = student.objects.order_by('rno')
@@ -234,6 +267,9 @@ def home(request):
     if request.method == "POST":
         rno=request.POST['browser']
         form = ImageForm(request.POST, request.FILES)
+        if(not request.user.is_authenticated or request.user.username=="demo_user"):
+            messages.info(request, "Not available for Demo user!")
+            return HttpResponseRedirect(reverse("teacher"))
         if form.is_valid():
             img = form.cleaned_data.get("photo")
             obj = images.objects.create(photo = img)

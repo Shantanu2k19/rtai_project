@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Login</title>
+    <link href="static/assets/img/favicon.png" rel="icon">
 
     <style>
                 *,
@@ -335,16 +336,16 @@
                 Teacher's Login
                 <span class="underline"></span>
                 </button>
-                <form action="{% url 'handLoginTeacher' %}" class="form form-login" method="POST" id="loginForm">
+                <form action="{% url 'handLoginTeacher' %}" class="form form-login" method="POST" id="loginForm" autocomplete="off">
                     {% csrf_token %}
                     <fieldset>
                         <div class="input-block">
                             <label for="login-email">Name</label>
-                            <input id="login-email" name="TeacherName" required>
+                            <input id="login-email" name="TeacherName" required autocomplete="off"/>
                         </div>
                         <div class="input-block">
                             <label for="login-password">Password</label>
-                            <input id="login-password" type="password" name="teacherPass" required>
+                            <input id="login-password" type="password" name="teacherPass" required autocomplete="off"/>
                         </div>
                     </fieldset>
                     <button type="submit" class="btn-login">Login</button>
@@ -403,8 +404,10 @@
 
     <script>
         function demoLogin(){
-            document.getElementById("login-email").innerHTML = "zodiac";
-            document.getElementById("login-password").innerHTML = "zodiac";
+            document.getElementById("login-email").value = "demo_user";
+            document.getElementById("login-email").innerHTML = "demo_user";
+            document.getElementById("login-password").innerHTML = "demoPassword123@";
+            document.getElementById("login-password").value = "demoPassword123@";
             document.getElementById("loginForm").submit();
         }
     </script>
