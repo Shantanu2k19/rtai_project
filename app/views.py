@@ -25,8 +25,8 @@ import base64
 import os
 import requests
 
-piServerURL = "http://127.0.0.1:5000/test"
-piServerURL2 = "http://127.0.0.1:5000/updateDB"
+piServerURL = "http://856a-122-162-148-73.ngrok.io/test"
+piServerURL2 = "http://856a-122-162-148-73.ngrok.io/updateDB"
 
 ##########################################################
 
@@ -55,8 +55,8 @@ def ajax_test(request):
 @api_view(('GET',))
 def mark_present(request):
     stud_rno = request.GET.get('rno')
+    stud_rno = stud_rno.replace('_','/')
     print(stud_rno," -> marking present")
-    return Response(status=status.HTTP_200_OK)
 
     from datetime import date
     today = date.today()
@@ -71,19 +71,20 @@ def mark_present(request):
         temp = f.presentStudents
         present_studs=temp.split('.')
         print(present_studs)
-        print("class found, appending")
+        mssg = "class found, appending"
 
         f.presentStudents = f.presentStudents+'.'+str(stud_id)
         f.save()
 
     except:
-        print("no class found, creating one")
+        mssg = "no class found, creating one"
         studentss = str(stud_id)
         f = record.objects.create(datee=d1, presentStudents=studentss)
         f.save()
   
     context = {
         "message":"success",
+        "note":mssg,
     }
     return Response(context, status=status.HTTP_200_OK)
 
