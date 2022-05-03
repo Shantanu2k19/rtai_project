@@ -277,6 +277,7 @@ def home(request):
             person = student.objects.get(rno=rno)
             print(person.name)
             person.img = obj
+            person.db=True
             person.save()
 
             form = ImageForm()
