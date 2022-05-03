@@ -286,7 +286,7 @@ def home(request):
                 messages.info(request, person.name+"'s Photo Received!Please update Database!")
                 return HttpResponseRedirect(reverse("teacher"))
             else:
-                messages.info(request, "Some error occured!")
+                messages.info(request, "done!") #Some error occured
                 return HttpResponseRedirect(reverse("teacher"))
     
     return render(request, "app/index.html", context)
